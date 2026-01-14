@@ -1,16 +1,13 @@
 import './globals.css';
 import './fanta.css';
 import Head from './Head';
+import Link from 'next/link';
+import { Eczar } from 'next/font/google';
+import GoTo from '@/components/GoTo';
 
-// const geistSans = Geist({
-//   variable: '--font-geist-sans',
-//   subsets: ['latin'],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: '--font-geist-mono',
-//   subsets: ['latin'],
-// });
+const eczar = Eczar({
+  variable: '--font-eczar',
+});
 
 export const metadata = {
   title: 'Expense Tracker · The Subscription Tracker',
@@ -18,10 +15,58 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const header = (
+    <header>
+      <div>
+        <Link href='/'>
+          <h1 className='text-gradient'>Expense Tracker</h1>
+        </Link>
+        <p>The Subscription Tracker</p>
+      </div>
+      <GoTo />
+    </header>
+  );
+
+  const footer = (
+    <footer>
+      <div className='hard-line' />
+      <div className='footer-content'>
+        <div>
+          <div>
+            <h4>Expense Tracker</h4>
+            <p>|</p>
+            <button disabled>Install app</button>
+          </div>
+          <p className='copyright'>
+            Copyright 2025-2026, Jordan Fulawka.
+            <br />
+            All rights reserved.
+          </p>
+        </div>
+        <div>
+          <p>
+            Facing issues? <a>Get help</a>
+          </p>
+          <p>
+            Suggestions for improvement? <a>Share feedback</a>
+          </p>
+          <div>
+            <Link href={'/privacy'}>Privary Policy</Link>
+            <Link href={'/tos'}>Terms of Service</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
   return (
-    <html lang='en'>
+    <html lang='en' className={eczar.className}>
       <Head />
-      <body>{children}</body>
+      <body>
+        {header}
+        <div className='full-line' />
+        <main>{children}</main>
+        {footer}
+      </body>
     </html>
   );
 }
