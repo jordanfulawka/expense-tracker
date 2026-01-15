@@ -1,11 +1,16 @@
+import { useAuth } from '@/context/AuthContext';
 import { getDaysUntilNextCharge, subscriptions } from '@/utils';
 
-function SubscriptionsDisplay({ handleShowInput }) {
+function SubscriptionsDisplay({ handleShowInput, handleEditSubscription }) {
+  const { handleDeleteSubscription, userData } = useAuth();
+
+  if (!userData?.subscriptions) return null;
+
   return (
     <section>
       <h2>Your Subscriptions</h2>
       <div className='card-container'>
-        {subscriptions.map((sub, subIndex) => {
+        {userData.subscriptions.map((sub, subIndex) => {
           const {
             name,
             category,
@@ -51,10 +56,20 @@ function SubscriptionsDisplay({ handleShowInput }) {
               <div className='white-line' />
               <p>{notes}</p>
               <div className='subscription-actions'>
-                <button className='button-card'>
-                  <i className='fa-solid fa-pen-to-square'></i>Edit
+                <button
+                  className='button-card'
+                  onClick={() => handleEditSubscription(subIndex)}
+                >
+                  <i className='fa-solid fa-pen-to-square'></i>
+                  Edit
                 </button>
-                <button className='button-card'>
+                <button
+                  className='button-card'
+                  onClick={() => {
+                    console.log(subIndex);
+                    handleDeleteSubscription(subIndex);
+                  }}
+                >
                   <i className='fa-solid fa-trash'></i>
                   Delete
                 </button>

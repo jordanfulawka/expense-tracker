@@ -2,26 +2,12 @@
 
 import { useState } from 'react';
 
-function SubscriptionForm({ onSubmit, closeInput }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    category: 'Entertainment',
-    cost: '',
-    currency: 'CAD',
-    billingFrequency: 'Monthly',
-    nextBillingDate: '',
-    paymentMethod: 'Credit',
-    startDate: '',
-    renewalType: '',
-    notes: '',
-    status: 'Active',
-  });
-
-  function handleChangeInput(e) {
-    const newData = { ...formData, [e.target.name]: e.target.value };
-    setFormData(newData);
-  }
-
+function SubscriptionForm({
+  onSubmit,
+  closeInput,
+  formData,
+  handleChangeInput,
+}) {
   function handleFormSubmit(e) {
     e.preventDefault();
     onSubmit();
