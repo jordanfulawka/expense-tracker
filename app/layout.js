@@ -4,6 +4,7 @@ import Head from './Head';
 import Link from 'next/link';
 import { Eczar } from 'next/font/google';
 import GoTo from '@/components/GoTo';
+import { AuthProvider } from '@/context/AuthContext';
 
 const eczar = Eczar({
   variable: '--font-eczar',
@@ -61,12 +62,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en' className={eczar.className}>
       <Head />
-      <body>
-        {header}
-        <div className='full-line' />
-        <main>{children}</main>
-        {footer}
-      </body>
+      <AuthProvider>
+        <body>
+          {header}
+          <div className='full-line' />
+          <main>{children}</main>
+          {footer}
+        </body>
+      </AuthProvider>
     </html>
   );
 }

@@ -1,22 +1,54 @@
 'use client';
 
-function SubscriptionForm() {
+import { useState } from 'react';
+
+function SubscriptionForm({ onSubmit, closeInput }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    category: 'Entertainment',
+    cost: '',
+    currency: 'CAD',
+    billingFrequency: 'Monthly',
+    nextBillingDate: '',
+    paymentMethod: 'Credit',
+    startDate: '',
+    renewalType: '',
+    notes: '',
+    status: 'Active',
+  });
+
+  function handleChangeInput(e) {
+    const newData = { ...formData, [e.target.name]: e.target.value };
+    setFormData(newData);
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    onSubmit();
+    console.log(formData);
+  }
   return (
     <section>
       <h2>Add a new subscription</h2>
-      <form onSubmit={() => {}}>
+      <form onSubmit={handleFormSubmit}>
         <label>
           <span>Subscription Name</span>
           <input
             type='text'
             name='name'
+            value={formData.name}
+            onChange={handleChangeInput}
             placeholder='e.g. Netflix, Spotify, AWS Hosting'
             required
           />
         </label>
         <label>
           <span>Category</span>
-          <select name='categorty'>
+          <select
+            name='category'
+            value={formData.category}
+            onChange={handleChangeInput}
+          >
             {[
               'Entertainment',
               'Music',
@@ -32,6 +64,8 @@ function SubscriptionForm() {
         <label>
           <span>Cost</span>
           <input
+            value={formData.cost}
+            onChange={handleChangeInput}
             type='number'
             name='cost'
             step='0.01'
@@ -41,7 +75,11 @@ function SubscriptionForm() {
         </label>
         <label>
           <span>Currency</span>
-          <select name='currency'>
+          <select
+            name='currency'
+            value={formData.currency}
+            onChange={handleChangeInput}
+          >
             {['CAD', 'USD', 'EUR', 'GBP', 'AUD', 'Other'].map(
               (cur, curIndex) => {
                 return <option key={curIndex}>{cur}</option>;
@@ -51,7 +89,11 @@ function SubscriptionForm() {
         </label>
         <label>
           <span>Billing Frequency</span>
-          <select name='billingFrequency'>
+          <select
+            name='billingFrequency'
+            value={formData.billingFrequency}
+            onChange={handleChangeInput}
+          >
             {['Monthly', 'Yearly', 'Quarterly', 'One-time'].map(
               (freq, freqIndex) => {
                 return <option key={freqIndex}>{freq}</option>;
@@ -61,7 +103,11 @@ function SubscriptionForm() {
         </label>
         <label>
           <span>Payment Method</span>
-          <select name='paymentMethod'>
+          <select
+            name='paymentMethod'
+            value={formData.paymentMethod}
+            onChange={handleChangeInput}
+          >
             {['Credit', 'Debit', 'Paypal', 'Bank Transfer'].map(
               (method, methodIndex) => {
                 return <option key={methodIndex}>{method}</option>;
@@ -71,11 +117,21 @@ function SubscriptionForm() {
         </label>
         <label>
           <span>Subscription Start Date</span>
-          <input type='date' name='startDate' required />
+          <input
+            type='date'
+            name='startDate'
+            required
+            value={formData.startDate}
+            onChange={handleChangeInput}
+          />
         </label>
         <label>
           <span>Status</span>
-          <select name='status'>
+          <select
+            name='status'
+            value={formData.status}
+            onChange={handleChangeInput}
+          >
             {['Active', 'Paused', 'Cancelled'].map((status, statusIndex) => {
               return <option key={statusIndex}>{status}</option>;
             })}
@@ -84,12 +140,14 @@ function SubscriptionForm() {
         <label className='fat-column'>
           <span>Notes</span>
           <textarea
+            value={formData.notes}
+            onChange={handleChangeInput}
             name='notes'
             placeholder='e.g. Shared with family, includes cloud storage'
           />
         </label>
         <div className='fat-column form-submit-btns'>
-          <button>Cancel</button>
+          <button onClick={closeInput}>Cancel</button>
           <button type='submit'>Add Subscription</button>
         </div>
       </form>

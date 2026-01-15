@@ -1,6 +1,6 @@
 import { getDaysUntilNextCharge, subscriptions } from '@/utils';
 
-function SubscriptionsDisplay() {
+function SubscriptionsDisplay({ handleShowInput }) {
   return (
     <section>
       <h2>Your Subscriptions</h2>
@@ -62,7 +62,10 @@ function SubscriptionsDisplay() {
             </div>
           );
         })}
-        <button className='button-card add-subscriptions'>
+        <button
+          className='button-card add-subscriptions'
+          onClick={handleShowInput}
+        >
           <i className='fa-solid fa-plus'></i>
           <h5>Add new subscription</h5>
         </button>
