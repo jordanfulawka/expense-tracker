@@ -1,10 +1,12 @@
 'use client';
 
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 function GoTo() {
-  const isAuthenticated = false;
+  const { currentUser, logout } = useAuth();
+  const isAuthenticated = !!currentUser;
   const path = usePathname();
   return (
     <div className='goto'>
@@ -18,7 +20,9 @@ function GoTo() {
           </Link>
         </>
       )}
-      {isAuthenticated && path == '/dashboard' && <button>Logout</button>}
+      {isAuthenticated && path == '/dashboard' && (
+        <button onClick={logout}>Logout</button>
+      )}
     </div>
   );
 }

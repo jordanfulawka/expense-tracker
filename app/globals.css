@@ -253,9 +253,14 @@ section > h2 {
   opacity: 1;
 }
 
-.add-subscription {
-  aspect-ratio: 16/9;
+.add-subscriptions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  gap: 0.5em;
+  padding: 4rem 1rem !important;
 }
 
 section form {

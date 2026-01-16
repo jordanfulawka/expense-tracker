@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { createContext, useState, useEffect, useContext } from 'react';
 
 const AuthContext = createContext();
@@ -19,8 +19,8 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(subscriptions);
+  const [loading, setLoading] = useState(false);
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -36,33 +36,51 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  async function saveToFirebase(data) {
+    try {
+      const userRef = doc(db, 'users', currentUser.uid);
+      const res = await setDoc(
+        userRef,
+        {
+          subscriptions: data,
+        },
+        { merge: true },
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   async function handleAddSubscription(newSubscription) {
+    if (userData.subscriptions.length > 30) return;
     const newSubscriptions = [...userData.subscriptions, newSubscription];
     setUserData({ subscriptions: newSubscriptions });
+
+    await saveToFirebase(newSubscriptions);
   }
 
   async function handleDeleteSubscription(index) {
     const newSubscriptions = userData.subscriptions.filter((val, valIndex) => {
       return valIndex !== index;
     });
-    console.log(newSubscriptions);
     setUserData({ subscriptions: newSubscriptions });
+
+    await saveToFirebase(newSubscriptions);
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
-        setLoading(true);
         setCurrentUser(user);
-
         if (!user) return;
 
+        setLoading(true);
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
         console.log('Fetching user data');
 
-        // let firebaseData = { subscriptions: [] };
-        let firebaseData = { subscriptions };
+        let firebaseData = { subscriptions: [] };
+        // let firebaseData = { subscriptions };
         if (docSnap.exists()) {
           console.log('Found user data');
           firebaseData = docSnap.data();

@@ -1,18 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 function SubscriptionForm({
-  onSubmit,
+  handleResetForm,
   closeInput,
   formData,
   handleChangeInput,
 }) {
+  const { handleAddSubscription } = useAuth();
+
   function handleFormSubmit(e) {
     e.preventDefault();
-    onSubmit();
-    console.log(formData);
+    handleAddSubscription(formData);
+    handleResetForm();
+    closeInput();
   }
+
   return (
     <section>
       <h2>Add a new subscription</h2>
@@ -69,7 +73,7 @@ function SubscriptionForm({
             {['CAD', 'USD', 'EUR', 'GBP', 'AUD', 'Other'].map(
               (cur, curIndex) => {
                 return <option key={curIndex}>{cur}</option>;
-              }
+              },
             )}
           </select>
         </label>
@@ -83,7 +87,7 @@ function SubscriptionForm({
             {['Monthly', 'Yearly', 'Quarterly', 'One-time'].map(
               (freq, freqIndex) => {
                 return <option key={freqIndex}>{freq}</option>;
-              }
+              },
             )}
           </select>
         </label>
@@ -97,7 +101,7 @@ function SubscriptionForm({
             {['Credit', 'Debit', 'Paypal', 'Bank Transfer'].map(
               (method, methodIndex) => {
                 return <option key={methodIndex}>{method}</option>;
-              }
+              },
             )}
           </select>
         </label>

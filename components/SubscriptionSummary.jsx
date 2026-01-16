@@ -1,7 +1,10 @@
+import { useAuth } from '@/context/AuthContext';
 import { calculateSubscriptionMetrics, subscriptions } from '@/utils';
 
 function SubscriptionSummary() {
-  const summary = calculateSubscriptionMetrics(subscriptions);
+  const { userData, loading } = useAuth();
+  if (loading) return;
+  const summary = calculateSubscriptionMetrics(userData.subscriptions);
   const emojis = [
     '🔥',
     '✅',

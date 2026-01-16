@@ -7,29 +7,36 @@ import SubscriptionSummary from '@/components/SubscriptionSummary';
 import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
 
+const blankSubscription = {
+  name: '',
+  category: 'Entertainment',
+  cost: '',
+  currency: 'CAD',
+  billingFrequency: 'Monthly',
+  nextBillingDate: '',
+  paymentMethod: 'Credit',
+  startDate: '',
+  renewalType: '',
+  notes: '',
+  status: 'Active',
+};
+
 export default function Page() {
   const [isAddEntry, setIsAddEntry] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: '',
-    category: 'Entertainment',
-    cost: '',
-    currency: 'CAD',
-    billingFrequency: 'Monthly',
-    nextBillingDate: '',
-    paymentMethod: 'Credit',
-    startDate: '',
-    renewalType: '',
-    notes: '',
-    status: 'Active',
-  });
+  const [formData, setFormData] = useState(blankSubscription);
 
-  const { handleDeleteSubscription, userData, currentUser } = useAuth();
+  const { handleDeleteSubscription, userData, currentUser, loading } =
+    useAuth();
   const isAuthenticated = !!currentUser;
 
   function handleChangeInput(e) {
     const newData = { ...formData, [e.target.name]: e.target.value };
     setFormData(newData);
+  }
+
+  function handleResetForm() {
+    setFormData(blankSubscription);
   }
 
   function handleEditSubscription(index) {
@@ -45,6 +52,9 @@ export default function Page() {
     setIsAddEntry((prev) => !prev);
   }
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   if (!isAuthenticated) {
     return <Login />;
   }
@@ -57,7 +67,7 @@ export default function Page() {
       />
       {isAddEntry && (
         <SubscriptionForm
-          onSubmit={() => {}}
+          handleResetForm={handleResetForm}
           closeInput={handleToggleInput}
           formData={formData}
           handleChangeInput={handleChangeInput}
